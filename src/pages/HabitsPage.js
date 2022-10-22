@@ -1,31 +1,41 @@
 import Topo from "../components/Topo";
 import styled from "styled-components";
 import Menu from "../components/Menu";
-import { AuthContext } from "../providers/auth";
+import Habitos from "../components/Habitos";
 import React from "react";
+import CriarHabito from "../components/CriarHabito";
+import { useState } from "react";
 
 export default function HabitsPage() {
 
-    const {dadosUsuario} = React.useContext(AuthContext);
-    console.log(dadosUsuario);
-    
+    const [habilitaCriarHabitos, setHabilitaCriarHabitos] = useState(false)
+
+    function habilitarNovosHabitos() {
+        setHabilitaCriarHabitos(true);
+    }
+
     return (
         <>
             <Topo />
-            
+
             <SecaoHabitos>
                 <TituloHabitos>
                     <h2>Meus Habitos</h2>
-                    <button>+</button>
+                    <button onClick={() => habilitarNovosHabitos()}>+</button>
                 </TituloHabitos>
+
                 <ListaHabitos>
-                <p>Você não tem nenhum hábito cadastrado ainda.
-                    Adicione um hábito para começar a trackear!</p>
-                <p>{dadosUsuario.email}</p>
+                    <CriarHabito
+                        habilitaCriarHabitos={habilitaCriarHabitos}
+                        setHabilitaCriarHabitos={setHabilitaCriarHabitos}
+                    ></CriarHabito>
+                    <Habitos />
+                    <p>Você não tem nenhum hábito cadastrado ainda.
+                        Adicione um hábito para começar a trackear!</p>
                 </ListaHabitos>
             </SecaoHabitos>
             <Menu />
-          
+
         </>
     )
 }
@@ -62,6 +72,10 @@ button{
     border: none;
     border-radius: 8px;
     margin-right: 20px;
+}
+
+button:hover{
+    cursor:pointer;
 }
 `
 const ListaHabitos = styled.div`

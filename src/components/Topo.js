@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import user from "../images/User.png"
 import React from "react";
 import { AuthContext } from "../providers/auth";
 
