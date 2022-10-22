@@ -1,12 +1,16 @@
 import styled from "styled-components";
 import user from "../images/User.png"
-
+import React from "react";
+import { AuthContext } from "../providers/auth";
 
 export default function Topo(){
+
+    const {dadosUsuario} = React.useContext(AuthContext);
+
     return(
         <SecaoTopo>
            <p>Tracklt</p>
-            <img src={user} alt="imagem usuario"/>
+            <img src={dadosUsuario.image} alt="imagem usuario"/>
         </SecaoTopo>
     )
 }

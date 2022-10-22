@@ -1,8 +1,14 @@
 import Topo from "../components/Topo";
 import styled from "styled-components";
 import Menu from "../components/Menu";
+import { AuthContext } from "../providers/auth";
+import React from "react";
 
 export default function HabitsPage() {
+
+    const {dadosUsuario} = React.useContext(AuthContext);
+    console.log(dadosUsuario);
+    
     return (
         <>
             <Topo />
@@ -15,6 +21,7 @@ export default function HabitsPage() {
                 <ListaHabitos>
                 <p>Você não tem nenhum hábito cadastrado ainda.
                     Adicione um hábito para começar a trackear!</p>
+                <p>{dadosUsuario.email}</p>
                 </ListaHabitos>
             </SecaoHabitos>
             <Menu />
@@ -30,6 +37,7 @@ height: calc(100vh - 140px);
 width: 375px;
 background-color: #f2f2f2;
 font-family: 'Lexend Deca', sans-serif;
+padding-top: 20px;
 
 `
 
@@ -37,7 +45,7 @@ const TituloHabitos = styled.div`
 display: flex;
 justify-content: space-between;
 align-items: center;
-margin: 20px 0;
+
 
 h2{
     font-size: 23px;
