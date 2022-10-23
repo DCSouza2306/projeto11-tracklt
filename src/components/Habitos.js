@@ -10,7 +10,9 @@ export default function Habitos({
     days,
     id,
     setHabitos,
-    habitos
+    setMudarTela,
+    mudarTela
+
 }) {
 
     const dias = [
@@ -29,11 +31,16 @@ export default function Habitos({
     }
 
     function deletarHabito(){
-        axios.delete(`${BASE_URL.habitos}/${id}`, config)
-        axios.get(`${BASE_URL.habitos}`,config)
-            .then((res) => {
-                setHabitos(res.data)
-            })
+        const excluir = window.confirm("Deseja realmente excluir esse habitos?")
+        if(excluir){
+            axios.delete(`${BASE_URL.habitos}/${id}`, config)
+            axios.get(`${BASE_URL.habitos}`,config)
+                .then((res) => {
+                    setHabitos(res.data)
+                    setMudarTela(!mudarTela)
+                })
+        }
+       
     }
 
     return (

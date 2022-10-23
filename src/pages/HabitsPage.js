@@ -14,6 +14,7 @@ export default function HabitsPage() {
 
     const { dadosUsuario } = React.useContext(AuthContext);
     const [habilitaCriarHabitos, setHabilitaCriarHabitos] = useState(false);
+    const [mudarTela, setMudarTela] = useState(false)
     const [habitos, setHabitos] = useState([])
     const config = {
         headers:
@@ -24,20 +25,22 @@ export default function HabitsPage() {
         const promise = axios.get(`${BASE_URL.habitos}`, config)
         promise.then((res) => {
             setHabitos(res.data);
-        })
+            
 
-    }, [habitos])
+        })
+    }, [mudarTela])
 
 
     function habilitarNovosHabitos() {
         setHabilitaCriarHabitos(true);
     }
 
+    console.log(habitos)
     return (
         <>
             <Topo />
 
-            <SecaoHabitos mostrarTexto={habitos.length===0? "" : "none"}>
+            <SecaoHabitos mostrarTexto={habitos.length === 0 ? "" : "none"}>
                 <TituloHabitos>
                     <h2>Meus Habitos</h2>
                     <button onClick={() => habilitarNovosHabitos()}>+</button>
@@ -47,6 +50,8 @@ export default function HabitsPage() {
                     <CriarHabito
                         habilitaCriarHabitos={habilitaCriarHabitos}
                         setHabilitaCriarHabitos={setHabilitaCriarHabitos}
+                        setMudarTela={setMudarTela}
+                        mudarTela={mudarTela}
                     ></CriarHabito>
                     {habitos.map((h) =>
                         <Habitos
@@ -55,9 +60,10 @@ export default function HabitsPage() {
                             name={h.name}
                             days={h.days}
                             setHabitos={setHabitos}
-                            habitos={habitos}
+                            setMudarTela={setMudarTela}
+                            mudarTela={mudarTela}
                         />)}
-                    <p className="texto-habitos">Você não tem nenhum hábito cadastrado ainda.
+                    <p className="escondido">Você não tem nenhum hábito cadastrado ainda.
                         Adicione um hábito para começar a trackear!</p>
                 </ListaHabitos>
             </SecaoHabitos>
@@ -75,7 +81,7 @@ background-color: #f2f2f2;
 font-family: 'Lexend Deca', sans-serif;
 padding-top: 20px;
 
-.texto-habitos{
+.escondido{
     display: ${props => props.mostrarTexto};
     margin-top: 20px;
 }

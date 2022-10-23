@@ -9,6 +9,8 @@ import { ThreeDots } from 'react-loader-spinner'
 export default function CriarHabito({
     habilitaCriarHabitos,
     setHabilitaCriarHabitos,
+    setMudarTela,
+    mudarTela
 
 }) {
 
@@ -37,6 +39,7 @@ export default function CriarHabito({
         e.preventDefault();
 
         setHabilitado(true);
+        setMudarTela(!mudarTela);
         diasSelecionados.sort();
 
         if (diasSelecionados.length === 0) {
@@ -54,6 +57,7 @@ export default function CriarHabito({
                     setHabito("");
                     setDiasSelecionados([]);
                     setHabilitado(false);
+                    setHabilitaCriarHabitos(false)
                 })
                 .catch((err) => {
                     console.log(err.response.data)
@@ -67,8 +71,6 @@ export default function CriarHabito({
 
     function cancelarHabito() {
         setHabilitaCriarHabitos(false);
-        setHabito("")
-        setDiasSelecionados([])
     }
     return (
         <CaixaHabito

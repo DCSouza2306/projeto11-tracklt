@@ -13,7 +13,7 @@ export default function DiasHabitos({
         if(diaHabito.includes(dia)){
            setSelecionado(true)
         }
-    },[dia])
+    },[],[dia])
   
     return(
         <BotaoDiaHabito 
