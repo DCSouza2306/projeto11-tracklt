@@ -30,30 +30,34 @@ export default function Habitos({
             { 'Authorization': `Bearer ${dadosUsuario.token}` }
     }
 
-    function deletarHabito(){
+    function deletarHabito() {
         const excluir = window.confirm("Deseja realmente excluir esse habitos?")
-        if(excluir){
+        if (excluir) {
             axios.delete(`${BASE_URL.habitos}/${id}`, config)
-            axios.get(`${BASE_URL.habitos}`,config)
+            axios.get(`${BASE_URL.habitos}`, config)
                 .then((res) => {
                     setHabitos(res.data)
                     setMudarTela(!mudarTela)
                 })
         }
-       
+
     }
 
     return (
         <ContainerHabito>
-            <ion-icon onClick={()=>deletarHabito()} name="trash-outline"></ion-icon>
-            <h2>{name}</h2>
-           {dias.map((d,i) => 
-           <DiasHabitos 
-           key={i}
-           nome={d.nome}
-           dia={d.dia}
-           diaHabito={days}
-           />)}
+            <ion-icon
+                data-identifier="delete-habit-btn"
+                onClick={() => deletarHabito()}
+                name="trash-outline">
+            </ion-icon>
+            <h2 data-identifier="habit-name">{name}</h2>
+            {dias.map((d, i) =>
+                <DiasHabitos
+                    key={i}
+                    nome={d.nome}
+                    dia={d.dia}
+                    diaHabito={days}
+                />)}
         </ContainerHabito>
     )
 }

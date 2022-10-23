@@ -25,7 +25,7 @@ export default function HabitsPage() {
         const promise = axios.get(`${BASE_URL.habitos}`, config)
         promise.then((res) => {
             setHabitos(res.data);
-            
+
 
         })
     }, [mudarTela])
@@ -43,7 +43,7 @@ export default function HabitsPage() {
             <SecaoHabitos mostrarTexto={habitos.length === 0 ? "" : "none"}>
                 <TituloHabitos>
                     <h2>Meus Habitos</h2>
-                    <button onClick={() => habilitarNovosHabitos()}>+</button>
+                    <button data-identifier="create-habit-btn" onClick={() => habilitarNovosHabitos()}>+</button>
                 </TituloHabitos>
 
                 <ListaHabitos>
@@ -63,7 +63,10 @@ export default function HabitsPage() {
                             setMudarTela={setMudarTela}
                             mudarTela={mudarTela}
                         />)}
-                    <p className="escondido">Você não tem nenhum hábito cadastrado ainda.
+                    <p
+                        data-identifier="no-habit-message"
+                        className="escondido"
+                    >Você não tem nenhum hábito cadastrado ainda.
                         Adicione um hábito para começar a trackear!</p>
                 </ListaHabitos>
             </SecaoHabitos>

@@ -79,6 +79,7 @@ export default function CriarHabito({
         >
             <form onSubmit={enviarHabito}>
                 <input
+                    data-identifier="input-habit-name"
                     required
                     disabled={habilitado}
                     value={habito}
@@ -96,12 +97,14 @@ export default function CriarHabito({
                 />)}
                 <div className="botoes">
                     <div
+                        data-identifier="cancel-habit-create-btn"
                         className="botoes-cancelar"
                         onClick={() => cancelarHabito()}
                     >Cancelar</div>
                     <button
                         type="submit"
                         className="botoes-salvar"
+                        data-identifier="save-habit-create-btn"
                     >
                         <p>Salvar</p>
                         <ThreeDots

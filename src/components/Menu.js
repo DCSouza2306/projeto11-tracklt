@@ -5,16 +5,25 @@ export default function Menu() {
     return (
         <SecaoMenu>
 
-            <Link to="/habits" style={{ color: 'inherit', textDecoration: 'inherit'}}>
-                <p>Hábitos</p>
+            <Link
+                to="/habits"
+                style={{ color: 'inherit', textDecoration: 'inherit' }}
+            >
+                <p  data-identifier="habit-page-action">Hábitos</p>
             </Link>
 
-            <Link to="/today" style={{ color: 'inherit', textDecoration: 'inherit'}}>
+            <Link
+                to="/today"
+                style={{ color: 'inherit', textDecoration: 'inherit' }}
+            >
                 <p className="today">Hoje</p>
             </Link>
 
-            <Link to="/historic" style={{ color: 'inherit', textDecoration: 'inherit'}}>
-                <p>Histórico</p>
+            <Link
+                to="/historic"
+                style={{ color: 'inherit', textDecoration: 'inherit' }}
+            >
+                <p  data-identifier="historic-page-action" >Histórico</p>
             </Link>
         </SecaoMenu>
 

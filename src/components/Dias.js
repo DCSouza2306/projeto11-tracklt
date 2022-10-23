@@ -19,7 +19,7 @@ export default function Dias({
 
     function SelecionarDia() {
         if (diasSelecionados.includes(dia)) {
-            const novosDias = diasSelecionados.filter((n) => n != dia)
+            const novosDias = diasSelecionados.filter((n) => n !== dia)
             setDiasSelecionados(novosDias);
             setDesabilitado(!desabilitado);
         } else {
@@ -34,10 +34,11 @@ export default function Dias({
 
     return (
         <BotaoDia
+            data-identifier="week-day-btn"
             cor={desabilitado ? "#FFFFFF" : "#D4D4D4"}
             background={desabilitado ? "#CFCFCF" : "#FFFFFF"}
             onClick={habito === "" ? () => { } : () => SelecionarDia()}
-        >{nome} </BotaoDia>
+        >{nome}</BotaoDia>
     )
 }
 
