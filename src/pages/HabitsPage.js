@@ -4,11 +4,30 @@ import Menu from "../components/Menu";
 import Habitos from "../components/Habitos";
 import React from "react";
 import CriarHabito from "../components/CriarHabito";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { BASE_URL } from "../constants/urls";
+import { AuthContext } from "../providers/auth";
 
 export default function HabitsPage() {
 
-    const [habilitaCriarHabitos, setHabilitaCriarHabitos] = useState(false)
+
+    const { dadosUsuario } = React.useContext(AuthContext);
+    const [habilitaCriarHabitos, setHabilitaCriarHabitos] = useState(false);
+    const [habitos, setHabitos] = useState([])
+    const config = {
+        headers:
+            { 'Authorization': `Bearer ${dadosUsuario.token}` }
+    }
+
+    useEffect(() => {
+        const promise = axios.get(`${BASE_URL.habitos}`, config)
+        promise.then((res) => {
+            setHabitos(res.data);
+        })
+
+    }, [habitos])
+
 
     function habilitarNovosHabitos() {
         setHabilitaCriarHabitos(true);
@@ -18,7 +37,7 @@ export default function HabitsPage() {
         <>
             <Topo />
 
-            <SecaoHabitos>
+            <SecaoHabitos mostrarTexto={habitos.length===0? "" : "none"}>
                 <TituloHabitos>
                     <h2>Meus Habitos</h2>
                     <button onClick={() => habilitarNovosHabitos()}>+</button>
@@ -29,8 +48,16 @@ export default function HabitsPage() {
                         habilitaCriarHabitos={habilitaCriarHabitos}
                         setHabilitaCriarHabitos={setHabilitaCriarHabitos}
                     ></CriarHabito>
-                    <Habitos />
-                    <p>Você não tem nenhum hábito cadastrado ainda.
+                    {habitos.map((h) =>
+                        <Habitos
+                            key={h.id}
+                            id={h.id}
+                            name={h.name}
+                            days={h.days}
+                            setHabitos={setHabitos}
+                            habitos={habitos}
+                        />)}
+                    <p className="texto-habitos">Você não tem nenhum hábito cadastrado ainda.
                         Adicione um hábito para começar a trackear!</p>
                 </ListaHabitos>
             </SecaoHabitos>
@@ -43,11 +70,15 @@ export default function HabitsPage() {
 
 
 const SecaoHabitos = styled.div`
-height: calc(100vh - 140px);
 width: 375px;
 background-color: #f2f2f2;
 font-family: 'Lexend Deca', sans-serif;
 padding-top: 20px;
+
+.texto-habitos{
+    display: ${props => props.mostrarTexto};
+    margin-top: 20px;
+}
 
 `
 
@@ -79,8 +110,12 @@ button:hover{
 }
 `
 const ListaHabitos = styled.div`
+height: calc(100vh - 200px);
 margin: 0 20px;
 font-size: 18px;
 color: #666666;
+overflow: hidden;
+overflow-y: scroll;
+
 
 `

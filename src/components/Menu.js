@@ -1,17 +1,27 @@
 import styled from "styled-components"
+import { Link } from "react-router-dom"
 
-export default function Menu(){
-    return(
+export default function Menu() {
+    return (
         <SecaoMenu>
-            <p>Hábitos</p>
-            <p className="today">Hoje</p>
-            <p>Histórico</p>
+
+            <Link to="/habits" style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                <p>Hábitos</p>
+            </Link>
+
+            <Link to="/today" style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                <p className="today">Hoje</p>
+            </Link>
+
+            <Link to="/historic" style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                <p>Histórico</p>
+            </Link>
         </SecaoMenu>
 
     )
 }
 
-const SecaoMenu = styled.div `
+const SecaoMenu = styled.div`
 width: 375px;
 height: 70px;
 font-size: 18px;
@@ -21,6 +31,10 @@ position: relative;
 color: #52B6FF;
 justify-content: space-between;
 align-items: center;
+
+Link{
+    text-decoration: none;
+}
 
 p{
     margin: 0 20px;

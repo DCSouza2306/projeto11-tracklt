@@ -4,22 +4,29 @@ import Dias from "./Dias";
 import axios from "axios";
 import { BASE_URL } from "../constants/urls";
 import { AuthContext } from "../providers/auth";
+import { ThreeDots } from 'react-loader-spinner'
 
 export default function CriarHabito({
     habilitaCriarHabitos,
-    setHabilitaCriarHabitos
+    setHabilitaCriarHabitos,
+
 }) {
 
 
     const [habito, setHabito] = useState("");
-    const [diasSelecionados, setDiasSelecionados] = useState([])
+    const [diasSelecionados, setDiasSelecionados] = useState([]);
+    const [habilitado, setHabilitado] = useState(false);
     const { dadosUsuario } = React.useContext(AuthContext);
+    const config = {
+        headers:
+            { 'Authorization': `Bearer ${dadosUsuario.token}` }
+    }
 
     const dias = [
         { dia: 1, nome: "S" },
         { dia: 2, nome: "T" },
         { dia: 3, nome: "Q" },
-        { dia: 3, nome: "Q" },
+        { dia: 4, nome: "Q" },
         { dia: 5, nome: "S" },
         { dia: 6, nome: "S" },
         { dia: 7, nome: "D" },
@@ -29,8 +36,12 @@ export default function CriarHabito({
 
         e.preventDefault();
 
+        setHabilitado(true);
+        diasSelecionados.sort();
+
         if (diasSelecionados.length === 0) {
             alert("Selecione pelo menos um dia");
+            setHabilitado(false);
         } else {
             const novoHabito = {
                 name: habito,
@@ -38,21 +49,17 @@ export default function CriarHabito({
 
             }
 
-            axios.post(`${BASE_URL.habitos}`,
-                novoHabito,
-                {
-                    headers:
-                        { 'Authorization': `Bearer ${dadosUsuario.token}` }
-                })
-                .then((res) => {
-                    console.log("deu certo");
-                    console.log(res.data)
+            axios.post(`${BASE_URL.habitos}`, novoHabito, config)
+                .then(() => {
+                    setHabito("");
+                    setDiasSelecionados([]);
+                    setHabilitado(false);
                 })
                 .catch((err) => {
                     console.log(err.response.data)
                 })
 
-                alert ("deu certo")
+
         }
 
 
@@ -60,13 +67,18 @@ export default function CriarHabito({
 
     function cancelarHabito() {
         setHabilitaCriarHabitos(false);
+        setHabito("")
+        setDiasSelecionados([])
     }
-
     return (
-        <CaixaHabito habilita={habilitaCriarHabitos}>
+        <CaixaHabito
+            habilita={habilitaCriarHabitos}
+            desabilita={habilitado ? "none" : ""}
+        >
             <form onSubmit={enviarHabito}>
                 <input
                     required
+                    disabled={habilitado}
                     value={habito}
                     placeholder="nome do habito"
                     onChange={e => setHabito(e.target.value)}
@@ -75,18 +87,32 @@ export default function CriarHabito({
                     key={i}
                     nome={d.nome}
                     dia={d.dia}
+                    habito={habito}
+                    setHabilitado={setHabilitado}
                     setDiasSelecionados={setDiasSelecionados}
                     diasSelecionados={diasSelecionados}
                 />)}
                 <div className="botoes">
-                    <button
+                    <div
                         className="botoes-cancelar"
                         onClick={() => cancelarHabito()}
-                    >Cancelar</button>
+                    >Cancelar</div>
                     <button
                         type="submit"
                         className="botoes-salvar"
-                    >Salvar</button>
+                    >
+                        <p>Salvar</p>
+                        <ThreeDots
+                            height="40"
+                            width="40"
+                            radius="9"
+                            color="#FFFFFF"
+                            ariaLabel="three-dots-loading"
+                            wrapperStyle={{}}
+                            wrapperClassName=""
+                            visible={habilitado}
+                        />
+                    </button>
                 </div>
             </form>
         </CaixaHabito>
@@ -102,6 +128,10 @@ margin-top: 10px;
 padding:18px;
 display: ${props => props.habilita ? "" : "none"};
 
+p{
+    display: ${props => props.desabilita}
+}
+
 .botoes{
     display: flex;
     justify-content: flex-end;
@@ -110,6 +140,8 @@ display: ${props => props.habilita ? "" : "none"};
 
 .botoes-cancelar{
     background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
     border: none;
     color: #52B6FF;
     width: 84px;
@@ -127,7 +159,7 @@ display: ${props => props.habilita ? "" : "none"};
     font-size: 16px;
 }
 
-button:hover{
+button,div:hover{
     cursor: pointer;
 }
 
