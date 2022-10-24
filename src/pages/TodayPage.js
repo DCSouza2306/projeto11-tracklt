@@ -6,35 +6,46 @@ import weekday from "dayjs/plugin/weekday"
 import UpdateLocale from "dayjs/plugin/updateLocale"
 import { AuthContext } from "../providers/auth";
 import { BASE_URL } from "../constants/urls";
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import HabitosHoje from "../components/HabitosHoje";
 
 export default function TodayPage() {
 
-    const { dadosUsuario } = React.useContext(AuthContext);
+    const { dadosUsuario, setPercentual, percentual } = React.useContext(AuthContext);
+    const [numeroMarcados, setNumeroMarcados] = useState(0)
     const [habitosHoje, setHabitosHoje] = useState([]);
+    const [atualiza, setAtualiza] = useState(false)
     const config = {
         headers:
             { 'Authorization': `Bearer ${dadosUsuario.token}` }
     }
 
-    useEffect(()=>{
-        axios.get(`${BASE_URL.habitos}/today`,config)
+    useEffect(() => {
+        axios.get(`${BASE_URL.habitos}/today`, config)
             .then(res => {
                 setHabitosHoje(res.data)
-                console.log(res.data)
+                const habitos = res.data
+                let novosMarcados = res.data
+                novosMarcados = novosMarcados.filter((r) => r.done === true)
+                setNumeroMarcados(novosMarcados.length)
+                const novoPercentual = novosMarcados.length / habitos.length
+                setPercentual(novoPercentual);
             })
             .catch(err => {
-                console.log(err.response.data)
+                console.log("deu erro")
             })
-    },[])
+
+    }, [atualiza])
+
+
+
 
     dayjs.extend(weekday);
     dayjs.extend(UpdateLocale)
 
     dayjs.updateLocale('en', {
-        weekdays:[
+        weekdays: [
             "Domingo",
             "Segunda",
             "Terça",
@@ -52,11 +63,29 @@ export default function TodayPage() {
     return (
         <>
             <Topo />
-            <SecaoHoje>
-                <h2>{diaSemana.weekday(dayjs().day()).format('dddd')}, {diaMes}</h2>
+            <SecaoHoje
+                desabilita={habitosHoje.length > 0 ? "none" : ""}
+                habilita={habitosHoje.length > 0 ? "" : "none"}
+            >
+                <h2 data-identifier="today-infos">{diaSemana.weekday(dayjs().day()).format('dddd')}, {diaMes}</h2>
                 <p className="texto-nao-concluido">Nenhum hábito concluido ainda</p>
-                <HabitosHoje />
-            
+                <p
+                    data-identifier="today-infos"
+                    className="texto-concluido"
+                >{percentual * 100}% dos hábitos concluídos</p>
+                {habitosHoje.map((h) =>
+                    <HabitosHoje
+                        key={h.id}
+                        idHabito={h.id}
+                        marcado={h.done}
+                        habito={h.name}
+                        sequencia={h.currentSequence}
+                        recorde={h.highestSequence}
+                        qtdHabitos={habitosHoje.length}
+                        setAtualiza={setAtualiza}
+                        atualiza={atualiza}
+                    />
+                )}
             </SecaoHoje>
             <Menu />
 
@@ -80,6 +109,14 @@ h2{
 .texto-nao-concluido{
     margin: 10px 20px;
     color: #BABABA;
+    display: ${props => props.desabilita}
+}
+
+.texto-concluido{
+    color: #8FC549;
+    margin: 10px 20px;
+    display: ${props => props.habilita}
+
 }
 
 `

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 export default function DiasHabitos({
     dia,
     nome,
-    diaHabito
+    diaHabito,
 }){
 
     const [selecionado, setSelecionado] = useState(false)
@@ -13,7 +13,7 @@ export default function DiasHabitos({
         if(diaHabito.includes(dia)){
            setSelecionado(true)
         }
-    },[],[dia])
+    },[],[diaHabito])
   
     return(
         <BotaoDiaHabito 

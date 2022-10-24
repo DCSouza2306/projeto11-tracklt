@@ -1,7 +1,15 @@
 import styled from "styled-components"
-import { Link } from "react-router-dom"
+import { Link, redirect } from "react-router-dom"
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
+import 'react-circular-progressbar/dist/styles.css'
+import { AuthContext } from "../providers/auth"
+import React from "react"
 
 export default function Menu() {
+
+
+    const { percentual } = React.useContext(AuthContext);
+
     return (
         <SecaoMenu>
 
@@ -9,13 +17,24 @@ export default function Menu() {
                 to="/habits"
                 style={{ color: 'inherit', textDecoration: 'inherit' }}
             >
-                <p  data-identifier="habit-page-action">Hábitos</p>
+                <p data-identifier="habit-page-action">Hábitos</p>
             </Link>
 
             <Link
                 to="/today"
                 style={{ color: 'inherit', textDecoration: 'inherit' }}
             >
+
+                <CircularProgressbar
+                    value={percentual}
+                    maxValue={1}
+                    strokeWidth={5}
+                    className="barra"
+                    styles={buildStyles({
+                        pathColor: '#FFFFFF',
+                        trailColor: '#52B6FF',
+                    })}/>
+
                 <p className="today">Hoje</p>
             </Link>
 
@@ -23,7 +42,7 @@ export default function Menu() {
                 to="/historic"
                 style={{ color: 'inherit', textDecoration: 'inherit' }}
             >
-                <p  data-identifier="historic-page-action" >Histórico</p>
+                <p data-identifier="historic-page-action" >Histórico</p>
             </Link>
         </SecaoMenu>
 
@@ -40,6 +59,14 @@ position: relative;
 color: #52B6FF;
 justify-content: space-between;
 align-items: center;
+
+.barra{
+    width: 83px;
+    position: absolute;
+    top: -26px;
+    right: 149px;
+    z-index: 1;
+}
 
 Link{
     text-decoration: none;

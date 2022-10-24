@@ -12,7 +12,7 @@ import { AuthContext } from "../providers/auth";
 export default function HabitsPage() {
 
 
-    const { dadosUsuario } = React.useContext(AuthContext);
+    const { dadosUsuario, setPercentual } = React.useContext(AuthContext);
     const [habilitaCriarHabitos, setHabilitaCriarHabitos] = useState(false);
     const [mudarTela, setMudarTela] = useState(false)
     const [habitos, setHabitos] = useState([])
@@ -25,8 +25,7 @@ export default function HabitsPage() {
         const promise = axios.get(`${BASE_URL.habitos}`, config)
         promise.then((res) => {
             setHabitos(res.data);
-
-
+            setPercentual(0)
         })
     }, [mudarTela])
 
@@ -35,7 +34,6 @@ export default function HabitsPage() {
         setHabilitaCriarHabitos(true);
     }
 
-    console.log(habitos)
     return (
         <>
             <Topo />

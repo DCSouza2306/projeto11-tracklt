@@ -28,7 +28,10 @@ export default function RegistrationPage() {
 
         axios.post(`${BASE_URL.login}/sign-up`, novoUsuario)
             .then(() => navigate("/"))
-            .catch(err => alert(err.response.data))
+            .catch(err => {
+                alert(err.response.data)
+                setHabilitado(false);
+            })
     }
 
     return (

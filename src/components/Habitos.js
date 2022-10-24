@@ -16,13 +16,13 @@ export default function Habitos({
 }) {
 
     const dias = [
+        { dia: 0, nome: "D" },
         { dia: 1, nome: "S" },
         { dia: 2, nome: "T" },
         { dia: 3, nome: "Q" },
         { dia: 4, nome: "Q" },
         { dia: 5, nome: "S" },
-        { dia: 6, nome: "S" },
-        { dia: 7, nome: "D" }
+        { dia: 6, nome: "S" }
     ]
     const { dadosUsuario } = React.useContext(AuthContext);
     const config = {
